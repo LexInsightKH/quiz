@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lex Insight - Master Quiz Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kantumruy Pro', sans-serif; background-color: #0f172a; }
+        .lex-red { color: #b91c1c; }
+        .bg-lex-red { background-color: #b91c1c; }
+        .gold-glow { box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); border: 2.5px solid #d4af37; }
+        .card-cream { background-color: #fffdf5; }
+        .option-btn { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #e2e8f0; border-radius: 1.25rem; }
+        .option-btn:hover:not(:disabled) { border-color: #b91c1c; background-color: #fff1f2; transform: translateX(8px); }
+        .correct { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #166534 !important; }
+        .wrong { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.4s ease forwards; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Premium Container -->
+    <div class="max-w-md w-full bg-lex-red p-1.5 rounded-[3.5rem] shadow-2xl">
+        <div class="card-cream rounded-[3.2rem] overflow-hidden relative shadow-inner">
+            
+            <!-- Official Branding Header -->
+            <div class="pt-12 pb-8 px-8 text-center flex flex-col items-center">
+                <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-xl gold-glow mb-6 overflow-hidden p-1.5">
+                    <!-- Lex Insight Official Logo -->
+                    <img src="https://i.ibb.co/C3Ym8PjP/FB-IMG-1771261185706.jpg" alt="Lex Insight Logo" class="w-full h-full object-contain">
+                </div>
+                
+                <h1 class="text-3xl font-black lex-red tracking-tighter mb-1">វិញ្ញាសាត្រៀមប្រឡង</h1>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Master Quiz Platform 🇰🇭</p>
+                
+                <div class="mt-8 w-full">
+                    <h2 class="text-2xl font-black text-slate-800 leading-tight">ត្រៀមប្រឡងមន្ត្រីពន្ធនាគារ</h2>
+                    <div class="inline-block mt-3 px-6 py-1.5 bg-white border border-slate-200 rounded-full shadow-sm">
+                        <p class="text-[11px] font-bold text-slate-600">ប្រភេទ៖ QCM (ពហុចម្លើយ)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 pb-12">
+                <div class="w-full h-px bg-slate-200/60 mb-8"></div>
+
+                <!-- Quiz Interface -->
+                <div id="quiz-box" class="animate-fade">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Question</span>
+                        <span id="q-count" class="text-2xl font-black text-slate-800">01/05</span>
+                    </div>
+
+                    <p id="question" class="text-lg font-bold text-slate-800 leading-relaxed mb-8 min-h-[5.5rem]"></p>
+                    <div id="options" class="space-y-3.5"></div>
+
+                    <button id="next-btn" class="w-full mt-12 py-5 bg-lex-red text-white rounded-[1.5rem] font-black text-lg shadow-xl shadow-red-200 hover:brightness-110 active:scale-95 transition-all disabled:opacity-20 flex items-center justify-center gap-3" disabled>
+                        សំណួរបន្ទាប់
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                </div>
+
+                <!-- Result Screen -->
+                <div id="result-box" class="hidden text-center py-8 animate-fade">
+                    <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-800 mb-2">ការប្រឡងបញ្ចប់!</h2>
+                    <div class="bg-white border-2 border-slate-50 rounded-[2.8rem] p-12 mb-10 shadow-sm">
+                        <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2">ពិន្ទុសរុបរបស់អ្នក</p>
+                        <p id="score" class="text-8xl font-black lex-red tracking-tighter">0/5</p>
+                    </div>
+                    <button onclick="location.reload()" class="w-full py-5 bg-slate-900 text-white rounded-[1.5rem] font-black shadow-xl">ព្យាយាមម្តងទៀត</button>
+                </div>
+            </div>
+
+            <!-- Mandatory Copyright Footer -->
+            <div class="bg-slate-50/80 p-8 text-center border-t border-slate-100">
+                <p class="text-[10px] text-slate-400 font-bold tracking-tight">Author: Global Affairs Insight team</p>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.1em] mt-1.5 leading-tight">Copyright: Ms. Sao sodanin (Executive Research Assistant)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { q: "តើតុលាការព្រហ្មទណ្ឌអន្តរជាតិ (ICC) ត្រូវបានបង្កើតឡើងនៅឆ្នាំណា?", o: ["១៩៤៥", "១៩៩៨", "២០០២", "២០១០"], a: 2 },
+            { q: "តើ ICC មានសមត្ថកិច្ចលើបទល្មើសអ្វីខ្លះ?", o: ["បទល្មើសចរាចរណ៍", "បទល្មើសប្រល័យពូជសាសន៍", "បទល្មើសលួច", "បទល្មើសគ្រឿងញៀន"], a: 1 },
+            { q: "តើអាណត្តិរបស់ចៅក្រម ICC មានរយៈពេលប៉ុន្មានឆ្នាំ?", o: ["៥ ឆ្នាំ", "៧ ឆ្នាំ", "៩ ឆ្នាំ", "១២ ឆ្នាំ"], a: 2 },
+            { q: "តើកម្ពុជាបានផ្តល់សច្ចាប័នលើលក្ខន្តិកៈទីក្រុងរ៉ូមនៅឆ្នាំណា?", o: ["២០០០", "២០០២", "២០០៤", "២០១០"], a: 1 },
+            { q: "តើ ICC មានស្នាក់ការកណ្តាលនៅទីក្រុងណា?", o: ["ភ្នំពេញ", "បារីស", "ឡាអេ (The Hague)", "ញូវយ៉ក"], a: 2 }
+        ];
+
+        let curr = 0; let score = 0; let done = false;
+
+        function load() {
+            done = false; document.getElementById('next-btn').disabled = true;
+            const data = quizData[curr];
+            document.getElementById('question').textContent = data.q;
+            document.getElementById('q-count').textContent = `${(curr+1).toString().padStart(2,'0')}/${quizData.length.toString().padStart(2,'0')}`;
+            const container = document.getElementById('options'); container.innerHTML = '';
+            data.o.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = "option-btn w-full p-5 text-left font-bold flex items-center gap-4 bg-white shadow-sm";
+                b.innerHTML = `<span class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-[11px] text-slate-400 shrink-0 font-black border border-slate-100 italic tracking-tighter">${String.fromCharCode(65+i)}</span> <span class="text-[15px] leading-snug">${opt}</span>`;
+                b.onclick = () => { if(!done) {
+                    done = true;
+                    if(i === data.a) { b.classList.add('correct'); score++; }
+                    else { b.classList.add('wrong'); container.children[data.a].classList.add('correct'); }
+                    document.getElementById('next-btn').disabled = false;
+                }};
+                container.appendChild(b);
+            });
+        }
+
+        document.getElementById('next-btn').onclick = () => {
+            curr++; if(curr < quizData.length) load();
+            else {
+                document.getElementById('quiz-box').classList.add('hidden');
+                document.getElementById('result-box').classList.remove('hidden');
+                document.getElementById('score').textContent = `${score}/${quizData.length}`;
+            }
+        };
+        window.onload = load;
+    </script>
+</body>
+                  </html>
