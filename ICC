@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>កម្រងសំណួរ ICC - Lex Insight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kantumruy Pro', sans-serif; background-color: #f0f2f5; color: #333; padding: 20px; direction: ltr; }
+        .quiz-container { max-width: 650px; margin: auto; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 8px solid #800000; }
+        
+        .header-section { text-align: center; margin-bottom: 30px; }
+        h1 { color: #002147; font-size: 24px; margin-bottom: 5px; }
+        .motto { color: #800000; font-weight: bold; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
+        
+        .question-box { margin-bottom: 25px; }
+        .question-text { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: #002147; }
+        
+        .options-list { list-style: none; padding: 0; }
+        .option-item { background: #f8f9fa; border: 2px solid #e9ecef; padding: 12px 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        .option-item:hover { background: #e2e6ea; border-color: #adb5bd; }
+        .option-item.selected { background: #002147; color: #fff; border-color: #002147; }
+        
+        button#next-btn { width: 100%; padding: 12px; background: #800000; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button#next-btn:hover { background: #a00000; box-shadow: 0 4px 12px rgba(128,0,0,0.3); }
+        
+        #result-area { display: none; text-align: center; }
+        .score-text { font-size: 22px; font-weight: bold; color: #002147; margin-bottom: 20px; }
+
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; font-size: 13px; color: #666; line-height: 1.8; }
+        .copyright-name { color: #002147; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div class="header-section">
+        <h1>កម្រងសំណួរចំណេះដឹងទូទៅស្តីពី ICC</h1>
+        <div class="motto">LAW & PROGRESS - LEX INSIGHT</div>
+    </div>
+
+    <div id="quiz-content">
+        <div class="question-box">
+            <div id="question" class="question-text">សំណួរនឹងបង្ហាញនៅទីនេះ...</div>
+            <div id="options" class="options-list">
+                </div>
+        </div>
+        <button id="next-btn" onclick="handleNext()">សំណួរបន្ទាប់</button>
+    </div>
+
+    <div id="result-area">
+        <div class="score-text" id="score-display"></div>
+        <button id="next-btn" onclick="location.reload()">ធ្វើកម្រងសំណួរឡើងវិញ</button>
+    </div>
+
+    <div class="footer">
+        រៀបចំដោយ៖ <strong>Global Affairs Insight team</strong><br>
+        រក្សាសិទ្ធិដោយ៖ <span class="copyright-name">កញ្ញា សៅ សុដានីន (Executive Research Assistant)</span><br>
+        ស្ថាបនិក៖ <strong>Lex Insight</strong>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "តើតុលាការព្រហ្មទណ្ឌអន្តរជាតិ (ICC) មានទីស្នាក់ការកណ្តាលនៅទីក្រុងណា?",
+            options: ["ទីក្រុងហ្សឺណែវ", "ទីក្រុងឡាអេ", "ទីក្រុងញូវយ៉ក", "ទីក្រុងប៉ារីស"],
+            correct: 1
+        },
+        {
+            q: "តើលក្ខន្តិកៈក្រុងរ៉ូម (Rome Statute) ត្រូវបានអនុម័តនៅឆ្នាំណា?",
+            options: ["១៩៩៨", "២០០២", "១៩៩៥", "២០១០"],
+            correct: 0
+        },
+        {
+            q: "តើបទល្មើសណាដែលស្ថិតនៅក្រោមយុត្តាធិការរបស់ ICC?",
+            options: ["បទឧក្រិដ្ឋប្រល័យពូជសាសន៍", "បទឧក្រិដ្ឋប្រឆាំងមនុស្សជាតិ", "បទឧក្រិដ្ឋសង្គ្រាម", "គ្រប់ចំណុចខាងលើ"],
+            correct: 3
+        }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let selectedIdx = null;
+
+    function loadQuestion() {
+        const qData = questions[currentQ];
+        document.getElementById("question").innerText = (currentQ + 1) + ". " + qData.q;
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+        
+        qData.options.forEach((opt, index) => {
+            const div = document.createElement("div");
+            div.className = "option-item";
+            div.innerText = opt;
+            div.onclick = () => selectOption(index, div);
+            optionsDiv.appendChild(div);
+        });
+        
+        selectedIdx = null;
+    }
+
+    function selectOption(index, element) {
+        const allOptions = document.querySelectorAll(".option-item");
+        allOptions.forEach(opt => opt.classList.remove("selected"));
+        element.classList.add("selected");
+        selectedIdx = index;
+    }
+
+    function handleNext() {
+        if (selectedIdx === null) {
+            alert("សូមជ្រើសរើសចម្លើយមួយ!");
+            return;
+        }
+
+        if (selectedIdx === questions[currentQ].correct) {
+            score++;
+        }
+
+        currentQ++;
+        if (currentQ < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById("quiz-content").style.display = "none";
+        const resultArea = document.getElementById("result-area");
+        resultArea.style.display = "block";
+        document.getElementById("score-display").innerText = "អ្នកឆ្លើយត្រូវ " + score + " ក្នុងចំណោម " + questions.length + " សំណួរ";
+    }
+
+    // ចាប់ផ្តើមសំណួរដំបូង
+    loadQuestion();
+</script>
+
+</body>
+</html>
